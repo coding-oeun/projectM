@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+
+    //test
+
+    //testtest
+
     public int gameMode; //1. musicMode 2.trafficMode
 
     public bool gameClear = false;
