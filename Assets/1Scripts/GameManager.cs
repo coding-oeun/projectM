@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
-    //test
-
-    //testtest
-
     public int gameMode; //1. musicMode 2.trafficMode
 
     public bool gameClear = false;
@@ -25,10 +20,10 @@ public class GameManager : MonoBehaviour
     public bool movePenalty = false; //  패널티 발생 상태 체크
     Vector3 stopPosition;
     Vector3 currentPosition;
-   
+
     Vector3 controllerR_StopPos;
     Vector3 controllerR_CurPos;
-   
+
     Vector3 controllerL_StopPos;
     Vector3 controllerL_CurPos;
 
@@ -42,17 +37,25 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //gameMode : 1. musicMode 2.trafficMode
+
         gameMode = 1;
 
         //MusicRule Script 할당된 GameObject 호출
         //musicRule = GameObject.Find("MusicManager").GetComponent<MusicRule>();
 
-        musicMode = GameObject.Find("MusicModeManager").GetComponent<MusicMode>();
-        newMusicRule = GameObject.Find("NewMusicManager").GetComponent<NewMusicRule>();
+        if (gameMode == 1)
+        {
+            musicMode = GameObject.Find("MusicModeManager").GetComponent<MusicMode>();
+        }
+        else if (gameMode == 2)
+        {
+            newMusicRule = GameObject.Find("NewMusicManager").GetComponent<NewMusicRule>();
+        }
+
         vrManager = GameObject.Find("VRManager").GetComponent<VRManager>();
         isBlock = true;
         startTime = Time.time;
-        
+
         // 레디고 출력관련
         gameStart = false;
         startText.SetActive(false);
@@ -62,13 +65,36 @@ public class GameManager : MonoBehaviour
         Debug.Log(gameMode);
 
     }
+    IEnumerator LoadingEnd() // Ready -> Go 순차 출력 코루틴
+    {
+        Debug.Log("StartLoadingEnd ");
+        yield return new WaitForSeconds(3);
+        readyText.SetActive(false);
+        startText.SetActive(true);
+        yield return new WaitForSeconds(1);
+        startText.SetActive(false);
+        gameStart = true;
+        Debug.Log("gameStart True");
+
+        isBlock = false;
+        Debug.Log("MusicStart");
+        //게임 모드 조건문 필요
+
+        if (gameMode == 1)
+        {
+            musicMode.MusicStart(); //기본모드진입
+        }
+        else if (gameMode == 2)
+        {
+            newMusicRule.mainMusic.playOnAwake = true;
+            newMusicRule.MusicStart(); //신호등모드진입
+        }
+    }
     void Update()
     {
         nowTime = Time.time - startTime; // nowTime = 현재 게임 경과 시간
-        //Debug.Log("nowTime: " + nowTime);
+                                         //Debug.Log("nowTime: " + nowTime);
 
-
-        
         CheckVRDevices();
         //Debug.Log("스턴확인" + isBlock);
     }
@@ -79,22 +105,23 @@ public class GameManager : MonoBehaviour
     void CheckVRDevices()
     {
         // 음악이 정지
-        if (newMusicRule.musicStop == true)
+        if (newMusicRule.musicStop == true || musicMode.musicStop == true)
         {
+            Debug.Log("VR디바이스체크");
             // 1. 정지 순간 위치
             if (checkStopPoint == false)
             {
                 stopPosition = vrManager.HmdCurrentPosCheck; //음악 정지 상태에서 플레이어 위치 저장
-                controllerR_StopPos = vrManager.controllerR_CurPosCheck;
-                controllerL_StopPos = vrManager.controllerL_CurPosCheck;
+                controllerR_StopPos = vrManager.ControllerR_CurPosCheck;
+                controllerL_StopPos = vrManager.ControllerL_CurPosCheck;
 
                 checkStopPoint = true;
             }
 
             // 2. 실시간 위치
             currentPosition = vrManager.HmdCurrentPosCheck;
-            controllerR_CurPos = vrManager.controllerR_CurPosCheck;
-            controllerL_CurPos = vrManager.controllerL_CurPosCheck;
+            controllerR_CurPos = vrManager.ControllerR_CurPosCheck;
+            controllerL_CurPos = vrManager.ControllerL_CurPosCheck;
 
             // 3. 두 위치간 거리
             float hmdPosDis = Vector3.Distance(currentPosition, stopPosition);
@@ -124,29 +151,4 @@ public class GameManager : MonoBehaviour
         StartCoroutine(LoadingEnd());
     }
 
-    IEnumerator LoadingEnd() // Ready -> Go 순차 출력 코루틴
-    {
-        Debug.Log("StartLoadingEnd ");
-        yield return new WaitForSeconds(3);
-        readyText.SetActive(false);
-        startText.SetActive(true);
-        yield return new WaitForSeconds(1);
-        startText.SetActive(false);
-        gameStart = true;
-        Debug.Log("gameStart True");
-
-        newMusicRule.mainMusic.playOnAwake = true;
-        isBlock = false;
-        Debug.Log("MusicStart");
-        //게임 모드 조건문 필요
-
-        if(gameMode == 1)
-        {
-            musicMode.MusicStart(); //기본모드진입
-        }
-        else if(gameMode == 2)
-        {
-            newMusicRule.MusicStart(); //신호등모드진입
-        }
-    }
 }

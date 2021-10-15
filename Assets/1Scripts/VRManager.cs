@@ -4,129 +4,91 @@ using UnityEngine;
 
 public class VRManager : MonoBehaviour
 {
-    [Header("Movement")]
-    public float ColliderTouch; //컨트롤러로 콜라이더 터치 카운트값,  move함수 관여
-    public bool isTimeLimit; // TimeLimit 코루틴 중복 방지 변수
-    public float timeCount; // 이동속도 패널티 방지 변수
-    public GameObject player; // 플레이어를 담을 변수
-
-    [Header("Device")]
-    public GameObject hmdPos; //헤드셋 위치 변수
-    public GameObject rightController; // 오른쪽 컨트롤러 
-    public GameObject leftController;  // 왼쪽 컨트롤러
-    private Vector3 hmdCurrentPosCheck;
-    public Vector3 controllerR_CurPosCheck; 
-    public Vector3 controllerL_CurPosCheck; 
-    public Vector3 HmdCurrentPosCheck { get { return hmdCurrentPosCheck; } } //헤드셋 위치 실시간 체크용(player 위치)
-    public Vector3 ControllerR_CurPosCheck { get { return controllerR_CurPosCheck; } } // 오른쪽 컨트롤러 위치 실시간
-    public Vector3 ControllerL_CurPosCheck { get { return controllerL_CurPosCheck; } } // 왼쪽 컨트롤러 위치 실시간
-
-    //public Vector3 hmdPosStop; //패널티 지점 헤드셋 위치 체크용
-
-    Vector3 rightCurrentPos2;
-    Vector3 leftCurrentPos2;
-
+    // 게임매니저 변수
     public GameManager gameManager;
-    public GameObject button;
-    
-    
-
+    // 플레이어를 담을 변수
+    public GameObject player;
+    [Header("Device")]
+    //헤드셋 위치 변수
+    public GameObject hmdPos;
+    // 오른쪽 컨트롤러 
+    public GameObject rightController;
+    // 왼쪽 컨트롤러
+    public GameObject leftController;
+    Vector3 hmdCurrentPosCheck;
+    Vector3 controllerR_CurPosCheck;
+    Vector3 controllerL_CurPosCheck;
+    Vector3 controllerR_CurPos;
+    Vector3 controllerL_CurPos;
+    //헤드셋 위치 실시간 체크용(player 위치)
+    public Vector3 HmdCurrentPosCheck { get { return hmdCurrentPosCheck; } }
+    // 오른쪽 컨트롤러 실시간 위치
+    public Vector3 ControllerR_CurPosCheck { get { return controllerR_CurPosCheck; } }
+    // 왼쪽 컨트롤러 실시간 위치
+    public Vector3 ControllerL_CurPosCheck { get { return controllerL_CurPosCheck; } }
 
     void Start()
     {
         player = GameObject.Find("XR Rig");
-        ColliderTouch = 0f;
-        isTimeLimit = false;
     }
-
     void Update()
     {
-        if (gameManager.isBlock !=true) // 스턴상태가 아닐때만 움직임
+        // 스턴상태가 아닐때만 움직임
+        if (gameManager.isBlock != true)
         {
-            MoveMent();
+            // 업데이트에서 컨트롤러 메소드 실행 
+            ShakeToMove();
         }
+        // 실시간 HMD 위치체크하는 메소드 실행 
         DeviceMoveCheck();
-
-        player.transform.position = new Vector3(player.transform.position.x, 1, player.transform.position.z); // 위아래 움직임 방지
-        
-        timeCount += Time.deltaTime;
-        if (timeCount > 5 && isTimeLimit == false)
-        {
-            StartCoroutine(TimeLimit());
-        }
+        // 업다운 못하게 고정하는 메소드 실행
+        UpdownFixed();
     }
-
     private void LateUpdate()
     {
-        rightCurrentPos2 = rightController.transform.position; // 오른쪽 다음 프레임 위치
-        leftCurrentPos2 = leftController.transform.position; // 왼쪽 다음 프레임 위치
+        ControllerCurPos();
     }
-
-    void DeviceMoveCheck() //VR 기기 움직임 체크
+    // 레이트업데이트에서의 컨트롤러 위치
+    void ControllerCurPos()
+    {
+        // 오른쪽 컨트롤러 다음 프레임 위치
+        controllerR_CurPos = rightController.transform.position;
+        // 왼쪽 컨트롤러 다음 프레임 위치
+        controllerL_CurPos = leftController.transform.position;
+    }
+    // 플레이어는 보는방향으로 이동하는데 위나 아래로 이동을 막는 메소드
+    void UpdownFixed()
+    {
+        player.transform.position = new Vector3(player.transform.position.x, 1, player.transform.position.z);
+    }
+    //패널티를 위한 VR 기기 움직임 체크
+    void DeviceMoveCheck()
     {
         hmdCurrentPosCheck = hmdPos.transform.position;
         controllerR_CurPosCheck = rightController.transform.position;
         controllerL_CurPosCheck = leftController.transform.position;
-        
+    }
+    // 현재 위치에서 x좌표값0.1 만큼 +
+    public Vector3 PlayerMove()
+    {
+        Vector3 viewingDir = hmdPos.transform.forward * Mathf.Lerp(0.1f, 0.09f, 0.1f);
+        return player.transform.position = player.transform.position + viewingDir;
     }
 
-    
-
-    public Vector3 Move()
+    // 업데이트 위치와 레이트업데이트 위치가 다를때 이동
+    void ShakeToMove()
     {
-        float maximum = 2.1f;
-        float minimum = 0.1f;
-
-        if (ColliderTouch >= 5) // 증가된 속도
+        Vector3 controllerR_StopPos = rightController.transform.position;
+        float rightPosComparison = Vector3.SqrMagnitude(controllerR_StopPos - controllerR_CurPos);
+        if (rightPosComparison > 0.001f)
         {
-
-            
-            Vector3 softmove = hmdPos.transform.forward * Mathf.Lerp(minimum, maximum, 0.1f); // 움직일때 변경되는 이동값 (서서히 증가, 감소 효과)
-            return player.transform.position = player.transform.position + softmove;
+            PlayerMove();
         }
-        else // 기본 속도
+        Vector3 controllerL_StopPos = leftController.transform.position;
+        float leftPosComparison = Vector3.SqrMagnitude(controllerL_StopPos - controllerL_CurPos);
+        if (leftPosComparison > 0.001f)
         {
-
-            minimum = 0.1f;
-            maximum = 0.09f;
-
-            Vector3 softmove = hmdPos.transform.forward * Mathf.Lerp(minimum, maximum, 0.1f); // 기본 이동값
-            return player.transform.position = player.transform.position + softmove;
-        }
-
-    }
-    IEnumerator TimeLimit() // 5초가 지나면 ColliderTouch 감소
-    {
-        isTimeLimit = true;
-        yield return new WaitForSeconds(0.1f);
-        ColliderTouch -= 0.1f; // 
-
-        if (ColliderTouch < 0) // 0 이하 방지
-            ColliderTouch = 0;
-
-        if (timeCount > 5)
-        {
-            StartCoroutine(TimeLimit());
-        }
-        else
-        {
-            isTimeLimit = false;
-        }
-    }
-
-    void MoveMent()// 업데이트에서 계속 초기화 하면서 지금위치와 다음프레임위치가 다를때 이동발생
-    {
-        Vector3 rightCurrentPos = rightController.transform.position; 
-        float rightPosCompare = Vector3.SqrMagnitude(rightCurrentPos - rightCurrentPos2);
-        if (rightPosCompare > 0.001f)
-        {
-            Move();
-        }
-        Vector3 leftCurrentPos = leftController.transform.position; 
-        float leftPosCompare = Vector3.SqrMagnitude(leftCurrentPos - leftCurrentPos2);
-        if (leftPosCompare > 0.001f)
-        {
-            Move();
+            PlayerMove();
         }
     }
 }

@@ -48,20 +48,23 @@ public class MusicMode : MonoBehaviour
     {
         Debug.Log("음악시작진입");
 
-        if(mapLevel == 1)
-        {
-            Debug.Log(mapLevel+ " 음악클립출력");
-            mainMusic.clip = musicLevel1[Random.Range(0, musicLevel1.Length)];
-        }
-        else if(mapLevel == 2)
+        if (mapLevel == 1)
         {
             Debug.Log(mapLevel + " 음악클립출력");
-            mainMusic.clip = musicLevel2[Random.Range(0, musicLevel1.Length)];
+            mainMusic.clip = musicLevel1[Random.Range(0, musicLevel1.Length)];
+            mainMusic.Play();
+        }
+        else if (mapLevel == 2)
+        {
+            Debug.Log(mapLevel + " 음악클립출력");
+            mainMusic.clip = musicLevel2[Random.Range(0, musicLevel2.Length)];
+            mainMusic.Play();
         }
         else if (mapLevel == 3)
         {
             Debug.Log(mapLevel + " 음악클립출력");
-            mainMusic.clip = musicLevel3[Random.Range(0, musicLevel1.Length)];
+            mainMusic.clip = musicLevel3[Random.Range(0, musicLevel3.Length)];
+            mainMusic.Play();
         }
 
         StartCoroutine(PlayTime());
@@ -69,6 +72,7 @@ public class MusicMode : MonoBehaviour
 
     IEnumerator PlayTime()
     {
+        Debug.Log("PlayTime 진입");
         musicStop = false;
         gameManager.checkStopPoint = false;
         gameManager.isBlock = false;
