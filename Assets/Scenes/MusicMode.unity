@@ -22903,7 +22903,7 @@ GameObject:
   - component: {fileID: 2008205518}
   - component: {fileID: 2008205517}
   m_Layer: 0
-  m_Name: MusicModeManager
+  m_Name: MusicMode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

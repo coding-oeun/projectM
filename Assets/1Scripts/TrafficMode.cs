@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewMusicRule : MonoBehaviour
+public class TrafficMode : MonoBehaviour
 {
     public GameManager gameManager;
     public VRManager vrManager;
     public AudioSource mainMusic;
-
-    public bool musicStop; //음악 정지 상태 진입 체크용
 
     public int mapLevel;
     public float stopLevel;
@@ -38,10 +36,10 @@ public class NewMusicRule : MonoBehaviour
     
     IEnumerator PlayTime(float playLevel)
     {
-        musicStop = false;
+        gameManager.musicStop = false;
         gameManager.checkStopPoint = false;
         gameManager.isBlock = false;
-        Debug.Log(musicStop);
+        Debug.Log(gameManager.musicStop);
         yield return new WaitForSeconds(playLevel); //MusicLevel 참조
         StartCoroutine(YellowLight());
     }
@@ -55,8 +53,8 @@ public class NewMusicRule : MonoBehaviour
 
     IEnumerator StopTime(float stopLevel)
     {
-        musicStop = true;
-        Debug.Log(musicStop);
+        gameManager.musicStop = true;
+        Debug.Log(gameManager.musicStop);
         yield return new WaitForSeconds(stopLevel); //MusicLevel 참조
         StartCoroutine(YellowLight());
         
@@ -71,11 +69,11 @@ public class NewMusicRule : MonoBehaviour
         gameManager.checkStopPoint = false;
         Debug.Log("Yellow OFF");
 
-        if(musicStop == true)
+        if(gameManager.musicStop == true)
         {
             MusicStart();
         }
-        else if(musicStop == false)
+        else if(gameManager.musicStop == false)
         {
             MusicPause();
         }
@@ -104,11 +102,11 @@ public class NewMusicRule : MonoBehaviour
         {
             Debug.Log("Yellow");
         }
-        else if (musicStop == true && YellowCheck == false)
+        else if (gameManager.musicStop == true && YellowCheck == false)
         {
             Debug.Log("Red");
         }
-        else if (musicStop != true && YellowCheck == false)
+        else if (gameManager.musicStop != true && YellowCheck == false)
         {
             Debug.Log("Green");
         }

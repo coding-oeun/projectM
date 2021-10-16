@@ -14,8 +14,6 @@ public class MusicMode : MonoBehaviour
 
     float[] stopTime = { 1.0f, 2.0f, 3.0f, 4.0f };
 
-    public bool musicStop; //음악 정지 상태 진입 체크용
-
     public int mapLevel;
     public float stopLevel;
     public float playLevel;
@@ -73,7 +71,7 @@ public class MusicMode : MonoBehaviour
     IEnumerator PlayTime()
     {
         Debug.Log("PlayTime 진입");
-        musicStop = false;
+        gameManager.musicStop = false;
         gameManager.checkStopPoint = false;
         gameManager.isBlock = false;
         yield return new WaitForSeconds(mainMusic.clip.length); //클립 노래 길이만큼 정지
@@ -82,7 +80,7 @@ public class MusicMode : MonoBehaviour
 
     IEnumerator StopTime()
     {
-        musicStop = true;
+        gameManager.musicStop = true;
         // 랜덤범위를 maplevel 에 따라 0~2/3~5/6~8 로 변경해야함
         yield return new WaitForSeconds(stopTime[Random.Range(0, 3)]); //노래 정지
         gameManager.checkStopPoint = false;

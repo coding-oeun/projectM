@@ -14,8 +14,11 @@ public class GameManager : MonoBehaviour
     public GameObject startText;
 
     //public MusicRule musicRule; // MusicRule Script 호출
-    public NewMusicRule newMusicRule;
+    public TrafficMode trafficMode;
     public MusicMode musicMode;
+    public bool musicStop;
+
+
     public VRManager vrManager;
     public bool movePenalty = false; //  패널티 발생 상태 체크
     Vector3 stopPosition;
@@ -45,11 +48,11 @@ public class GameManager : MonoBehaviour
 
         if (gameMode == 1)
         {
-            musicMode = GameObject.Find("MusicModeManager").GetComponent<MusicMode>();
+            musicMode = GameObject.Find("MusicMode").GetComponent<MusicMode>();
         }
         else if (gameMode == 2)
         {
-            newMusicRule = GameObject.Find("NewMusicManager").GetComponent<NewMusicRule>();
+            trafficMode = GameObject.Find("TrafficMode").GetComponent<TrafficMode>();
         }
 
         vrManager = GameObject.Find("VRManager").GetComponent<VRManager>();
@@ -86,8 +89,8 @@ public class GameManager : MonoBehaviour
         }
         else if (gameMode == 2)
         {
-            newMusicRule.mainMusic.playOnAwake = true;
-            newMusicRule.MusicStart(); //신호등모드진입
+            trafficMode.mainMusic.playOnAwake = true;
+            trafficMode.MusicStart(); //신호등모드진입
         }
     }
     void Update()
@@ -105,7 +108,7 @@ public class GameManager : MonoBehaviour
     void CheckVRDevices()
     {
         // 음악이 정지
-        if (newMusicRule.musicStop == true || musicMode.musicStop == true)
+        if (musicStop == true)
         {
             Debug.Log("VR디바이스체크");
             // 1. 정지 순간 위치
