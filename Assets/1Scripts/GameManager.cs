@@ -36,12 +36,13 @@ public class GameManager : MonoBehaviour
     public bool checkStopPoint; // 멈췄을 때 플레이어 위치체크 여부
     public bool checkPenaltyYn;
     public bool isBlock;
-
+    
+    public Button button;
     void Start()
     {
         //gameMode : 1. musicMode 2.trafficMode
 
-        gameMode = 1;
+        gameMode = 2;
 
         //MusicRule Script 할당된 GameObject 호출
         //musicRule = GameObject.Find("MusicManager").GetComponent<MusicRule>();
@@ -152,6 +153,19 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("ReadyGo Start");
         StartCoroutine(LoadingEnd());
+    }
+    public IEnumerator ButtonReturn() // 버튼 눌렀을 때 1초후 제자리 
+    {
+        yield return new WaitForSeconds(1f);
+
+        Vector3 buttonReturn = Vector3.up * Mathf.Lerp(0.1f, 0.09f, 0.1f);
+        button.GetComponent<Button>();
+        button.transform.position = button.transform.position + buttonReturn;
+    }
+    public void GameOver()
+    {
+        Debug.Log("게임 클리어");
+        StartCoroutine(ButtonReturn());
     }
 
 }
