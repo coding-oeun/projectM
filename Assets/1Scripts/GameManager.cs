@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
     {
         //gameMode : 1. musicMode 2.trafficMode
 
-        gameMode = 1;
+        gameMode = 2;
 
         //MusicRule Script 할당된 GameObject 호출
         //musicRule = GameObject.Find("MusicManager").GetComponent<MusicRule>();
@@ -68,6 +68,13 @@ public class GameManager : MonoBehaviour
         life = 3;
         Debug.Log(gameMode);
 
+    }
+
+    // 1. 게임 시작 준비 (레디고)
+    void ReadyGo()
+    {
+        Debug.Log("ReadyGo Start");
+        StartCoroutine(LoadingEnd());
     }
     IEnumerator LoadingEnd() // Ready -> Go 순차 출력 코루틴
     {
@@ -139,7 +146,6 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
     void PenaltyProcess()
     {
         isBlock = true;
@@ -148,12 +154,6 @@ public class GameManager : MonoBehaviour
         Debug.Log("패널티 끝");
     }
 
-    // 1. 게임 시작 준비 (레디고)
-    void ReadyGo()
-    {
-        Debug.Log("ReadyGo Start");
-        StartCoroutine(LoadingEnd());
-    }
     public IEnumerator ButtonReturn() // 버튼 눌렀을 때 1초후 제자리 
     {
         yield return new WaitForSeconds(1f);

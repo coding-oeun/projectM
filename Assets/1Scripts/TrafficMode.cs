@@ -13,12 +13,24 @@ public class TrafficMode : MonoBehaviour
     public float playLevel;
     public bool YellowCheck;
 
+    public GameObject redRight;
+    public GameObject yellowRight;
+    public GameObject greenRight;
+
+    public Renderer redRenderer;
+    public Renderer yellowRenderer;
+    public Renderer greenRenderer;
+
     private void Start()
     {
-         mapLevel = 1;
-         stopLevel = 3;
-         playLevel = 8;
-         YellowCheck = false;
+        mapLevel = 1;
+        stopLevel = 3;
+        playLevel = 8;
+        YellowCheck = false;
+
+        redRenderer = GameObject.FindWithTag("RedRight").GetComponent<Renderer>();
+        yellowRenderer = GameObject.FindWithTag("YellowRight").GetComponent<Renderer>();
+        greenRenderer = GameObject.FindWithTag("GreenRight").GetComponent<Renderer>();
     }
 
     private void Update()
@@ -60,7 +72,7 @@ public class TrafficMode : MonoBehaviour
         
     }
 
-    IEnumerator YellowLight()
+    public IEnumerator YellowLight()
     {
         YellowCheck = true;
         Debug.Log("Yellow ON");
@@ -98,18 +110,37 @@ public class TrafficMode : MonoBehaviour
     }
     void TrafficLight()
     {
-        if (YellowCheck == true)
+        if(gameManager.gameStart == false)
         {
-            Debug.Log("Yellow");
+            redRenderer.material.color = Color.red;
+            yellowRenderer.material.color = Color.gray;
+            greenRenderer.material.color = Color.gray;
         }
-        else if (gameManager.musicStop == true && YellowCheck == false)
+        else if(gameManager.gameStart == true)
         {
-            Debug.Log("Red");
+            if (YellowCheck == true)
+            {
+                Debug.Log("Yellow");
+                yellowRenderer.material.color = Color.yellow;
+                redRenderer.material.color = Color.gray;
+                greenRenderer.material.color = Color.gray;
+            }
+            else if (gameManager.musicStop == true && YellowCheck == false)
+            {
+                Debug.Log("Red");
+                redRenderer.material.color = Color.red;
+                yellowRenderer.material.color = Color.gray;
+                greenRenderer.material.color = Color.gray;
+            }
+            else if (gameManager.musicStop != true && YellowCheck == false)
+            {
+                Debug.Log("Green");
+                greenRenderer.material.color = Color.green;
+                yellowRenderer.material.color = Color.gray;
+                redRenderer.material.color = Color.gray;
+            }
         }
-        else if (gameManager.musicStop != true && YellowCheck == false)
-        {
-            Debug.Log("Green");
-        }
+        
     }
 
 }

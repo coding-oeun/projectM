@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Button
   - Hand
+  - RedRight
+  - GreenRight
+  - YellowRight
   layers:
   - Default
   - TransparentFX
