@@ -80,13 +80,13 @@ public class VRManager : MonoBehaviour
     {
         Vector3 controllerR_StopPos = rightController.transform.position;
         float rightPosComparison = Vector3.SqrMagnitude(controllerR_StopPos - controllerR_CurPos);
-        if (rightPosComparison > 0.001f)
+        if (rightPosComparison > 0.004f)
         {
             PlayerMove();
         }
         Vector3 controllerL_StopPos = leftController.transform.position;
         float leftPosComparison = Vector3.SqrMagnitude(controllerL_StopPos - controllerL_CurPos);
-        if (leftPosComparison > 0.001f)
+        if (leftPosComparison > 0.004f)
         {
             PlayerMove();
         }

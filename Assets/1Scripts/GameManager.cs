@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
     {
         //gameMode : 1. musicMode 2.trafficMode
 
-        gameMode = 2;
+        gameMode = 1;
 
         //MusicRule Script 할당된 GameObject 호출
         //musicRule = GameObject.Find("MusicManager").GetComponent<MusicRule>();
