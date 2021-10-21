@@ -13,13 +13,9 @@ public class TrafficMode : MonoBehaviour
     public float playLevel;
     public bool YellowCheck;
 
-    public GameObject redRight;
-    public GameObject yellowRight;
-    public GameObject greenRight;
-
-    public Renderer redRenderer;
-    public Renderer yellowRenderer;
-    public Renderer greenRenderer;
+    GameObject[] yellowLights;
+    GameObject[] redLights;
+    GameObject[] greenLights;
 
     private void Start()
     {
@@ -28,9 +24,11 @@ public class TrafficMode : MonoBehaviour
         playLevel = 8;
         YellowCheck = false;
 
-        redRenderer = GameObject.FindWithTag("RedRight").GetComponent<Renderer>();
-        yellowRenderer = GameObject.FindWithTag("YellowRight").GetComponent<Renderer>();
-        greenRenderer = GameObject.FindWithTag("GreenRight").GetComponent<Renderer>();
+        yellowLights = GameObject.FindGameObjectsWithTag("YellowLight");
+        redLights = GameObject.FindGameObjectsWithTag("RedLight");
+        greenLights = GameObject.FindGameObjectsWithTag("GreenLight");
+        // FindWithTag 는 하이라키상 가장 하단에 있는 오브젝트를 찾는다
+        // 모든 태그를 찾는다 FindGameObjectsWithTag
     }
 
     private void Update()
@@ -110,37 +108,54 @@ public class TrafficMode : MonoBehaviour
     }
     void TrafficLight()
     {
-        if(gameManager.gameStart == false)
+        if (YellowCheck == true)
         {
-            redRenderer.material.color = Color.red;
-            yellowRenderer.material.color = Color.gray;
-            greenRenderer.material.color = Color.gray;
-        }
-        else if(gameManager.gameStart == true)
-        {
-            if (YellowCheck == true)
+            Debug.Log("Yellow");
+            foreach (GameObject yellowLight in yellowLights)
             {
-                Debug.Log("Yellow");
-                yellowRenderer.material.color = Color.yellow;
-                redRenderer.material.color = Color.gray;
-                greenRenderer.material.color = Color.gray;
+                yellowLight.GetComponent<MeshRenderer>().material.color = Color.yellow;
             }
-            else if (gameManager.musicStop == true && YellowCheck == false)
+            foreach (GameObject redLight in redLights)
             {
-                Debug.Log("Red");
-                redRenderer.material.color = Color.red;
-                yellowRenderer.material.color = Color.gray;
-                greenRenderer.material.color = Color.gray;
+                redLight.GetComponent<MeshRenderer>().material.color = Color.gray;
             }
-            else if (gameManager.musicStop != true && YellowCheck == false)
+            foreach (GameObject greenLight in greenLights)
             {
-                Debug.Log("Green");
-                greenRenderer.material.color = Color.green;
-                yellowRenderer.material.color = Color.gray;
-                redRenderer.material.color = Color.gray;
+                greenLight.GetComponent<MeshRenderer>().material.color = Color.gray;
             }
         }
-        
+        else if (gameManager.musicStop == true && YellowCheck == false || gameManager.gameStart == false)
+        {
+            Debug.Log("Red");
+            foreach (GameObject redLight in redLights)
+            {
+                redLight.GetComponent<MeshRenderer>().material.color = Color.red;
+            }
+            foreach (GameObject greenLight in greenLights)
+            {
+                greenLight.GetComponent<MeshRenderer>().material.color = Color.gray;
+            }
+            foreach (GameObject yellowLight in yellowLights)
+            {
+                yellowLight.GetComponent<MeshRenderer>().material.color = Color.gray;
+            }
+        }
+        else if (gameManager.musicStop != true && YellowCheck == false)
+        {
+            Debug.Log("Green");
+            foreach (GameObject greenLight in greenLights)
+            {
+                greenLight.GetComponent<MeshRenderer>().material.color = Color.green;
+            }
+            foreach (GameObject redLight in redLights)
+            {
+                redLight.GetComponent<MeshRenderer>().material.color = Color.gray;
+            }
+            foreach (GameObject yellowLight in yellowLights)
+            {
+                yellowLight.GetComponent<MeshRenderer>().material.color = Color.gray;
+            }
+        }
     }
 
 }

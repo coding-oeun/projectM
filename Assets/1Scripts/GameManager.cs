@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    // 게임 남은 기회 UI 출력
+    // 타이머 (선택)
+    // 성공 화면 처리
+    // 실패 화면 처리
+    // 패널티 화면 처리
+
     public int gameMode; //1. musicMode 2.trafficMode
 
     public bool gameClear = false;

@@ -6,6 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class LobbyManager : MonoBehaviour
 {
+
+    //버튼 1회 눌리면 모드 음악 출력
+    //버튼 2회 눌리면 모드 진입
+
     public GameManager gameManager;
     void Start()
     {
