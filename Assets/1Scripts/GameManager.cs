@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour
     public float nowTime;
     public GameObject readyText;
     public GameObject startText;
+    public Text lifeText;
 
     //public MusicRule musicRule; // MusicRule Script 호출
     public TrafficMode trafficMode;
@@ -47,11 +49,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //gameMode : 1. musicMode 2.trafficMode
-
+        // test 용
         gameMode = 2;
-
-        //MusicRule Script 할당된 GameObject 호출
-        //musicRule = GameObject.Find("MusicManager").GetComponent<MusicRule>();
 
         if (gameMode == 1)
         {
@@ -72,6 +71,7 @@ public class GameManager : MonoBehaviour
         ReadyGo();
 
         life = 3;
+        lifeText = GameObject.Find("LifeText").GetComponent<Text>();
         Debug.Log(gameMode);
 
     }
@@ -157,6 +157,7 @@ public class GameManager : MonoBehaviour
         isBlock = true;
         Debug.Log("패널티 시작");
         life -= 1;
+        lifeText.text = life + "/ 3";
         Debug.Log("패널티 끝");
     }
 
