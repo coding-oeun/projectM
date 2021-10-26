@@ -16,5 +16,6 @@ using UnityEngine;
                 gameManager.GameOver();
             }
         }
+    
 
     }

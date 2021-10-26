@@ -11,14 +11,17 @@ public class LobbyManager : MonoBehaviour
     //버튼 2회 눌리면 모드 진입
 
     public GameManager gameManager;
+
     void Start()
     {
-        
+
     }
 
     void Update()
     {
         StartCoroutine(Test());
+        
+
     }
 
     IEnumerator Test()
@@ -26,7 +29,7 @@ public class LobbyManager : MonoBehaviour
         yield return new WaitForSeconds(2);
         Debug.Log("MusicMode 이동");
         SceneManager.LoadScene("MusicMode");
-        gameManager.gameMode = 1;
+        gameManager.gameMMMode = 2;
     }
     //gameMode : 1. musicMode 2.trafficMode
 

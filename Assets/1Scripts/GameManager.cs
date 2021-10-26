@@ -11,8 +11,9 @@ public class GameManager : MonoBehaviour
     // 실패 화면 처리
     // 패널티 화면 처리
 
-    public int gameMode; //1. musicMode 2.trafficMode
-
+    //public int gameMode; //1. musicMode 2.trafficMode
+    public int gameMMMode = 2;
+    public int gameTMMode = 0;
     public bool gameClear = false;
     public bool gameStart;
     public float startTime;
@@ -48,15 +49,15 @@ public class GameManager : MonoBehaviour
     public Button button;
     void Start()
     {
-        //gameMode : 1. musicMode 2.trafficMode
         // test 용
-        gameMode = 2;
+        gameMMMode = 2;
+        //gameTMMode = 0;
 
-        if (gameMode == 1)
+        if (gameMMMode == 2)
         {
             musicMode = GameObject.Find("MusicMode").GetComponent<MusicMode>();
         }
-        else if (gameMode == 2)
+        else if (gameTMMode == 2)
         {
             trafficMode = GameObject.Find("TrafficMode").GetComponent<TrafficMode>();
         }
@@ -72,8 +73,7 @@ public class GameManager : MonoBehaviour
 
         life = 3;
         lifeText = GameObject.Find("LifeText").GetComponent<Text>();
-        Debug.Log(gameMode);
-
+        lifeText.text = life + "/ 3";
     }
 
     // 1. 게임 시작 준비 (레디고)
@@ -97,11 +97,11 @@ public class GameManager : MonoBehaviour
         Debug.Log("MusicStart");
         //게임 모드 조건문 필요
 
-        if (gameMode == 1)
+        if (gameMMMode == 2)
         {
             musicMode.MusicStart(); //기본모드진입
         }
-        else if (gameMode == 2)
+        else if (gameTMMode == 2)
         {
             trafficMode.mainMusic.playOnAwake = true;
             trafficMode.MusicStart(); //신호등모드진입
