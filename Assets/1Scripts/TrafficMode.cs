@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class TrafficMode : MonoBehaviour
 {
+    public GameObject readyText;
+    public GameObject startText;
+
     public GameManager gameManager;
     public VRManager vrManager;
     public AudioSource mainMusic;
@@ -19,6 +22,10 @@ public class TrafficMode : MonoBehaviour
 
     private void Start()
     {
+        // 레디고 출력관련
+        gameManager.gameStart = false;
+        startText.SetActive(false);
+
         mapLevel = 1;
         stopLevel = 3;
         playLevel = 8;
@@ -29,12 +36,45 @@ public class TrafficMode : MonoBehaviour
         greenLights = GameObject.FindGameObjectsWithTag("GreenLight");
         // FindWithTag 는 하이라키상 가장 하단에 있는 오브젝트를 찾는다
         // 모든 태그를 찾는다 FindGameObjectsWithTag
+
+        ReadyGo();
     }
 
     private void Update()
     {
         MusicLevel();
         TrafficLight();
+    }
+
+    void ReadyGo()
+    {
+        Debug.Log("ReadyGo Start");
+        StartCoroutine(LoadingEnd());
+    }
+    IEnumerator LoadingEnd() // Ready -> Go 순차 출력 코루틴
+    {
+        Debug.Log("StartLoadingEnd ");
+        yield return new WaitForSeconds(3);
+        readyText.SetActive(false);
+        startText.SetActive(true);
+        yield return new WaitForSeconds(1);
+        startText.SetActive(false);
+        gameManager.gameStart = true;
+        Debug.Log("gameStart True");
+
+        gameManager.isBlock = false;
+        Debug.Log("MusicStart");
+        //게임 모드 조건문 필요
+
+        if (gameMMMode == 2)
+        {
+            musicMode.MusicStart(); //기본모드진입
+        }
+        else if (gameTMMode == 2)
+        {
+            trafficMode.mainMusic.playOnAwake = true;
+            trafficMode.MusicStart(); //신호등모드진입
+        }
     }
 
     public void MusicStart()
