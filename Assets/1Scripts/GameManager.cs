@@ -13,15 +13,12 @@ public class GameManager : MonoBehaviour
     // 패널티 화면 처리
 
     //public int gameMode; //1. musicMode 2.trafficMode
-    public int gameMMMode;
-    public int gameTMMode;
     public bool gameStart;
     public bool gameClear;
     public bool gameOver;
     public float startTime;
     public float nowTime;
-    public GameObject readyText;
-    public GameObject startText;
+
     public GameObject clearText;
     public GameObject overText;
     public GameObject tryText;
@@ -60,28 +57,9 @@ public class GameManager : MonoBehaviour
     public AudioClip overSound; //게임 실패 시
     void Start()
     {
-        //test 용
-        gameTMMode = 0;
-        gameMMMode = 0;
-        //gameTMMode = 0;
-
-        if (gameMMMode == 2)
-        {
-            musicMode = GameObject.Find("MusicMode").GetComponent<MusicMode>();
-        }
-        else if (gameTMMode == 2)
-        {
-            trafficMode = GameObject.Find("TrafficMode").GetComponent<TrafficMode>();
-        }
-
         vrManager = GameObject.Find("VRManager").GetComponent<VRManager>();
         isBlock = true;
         startTime = Time.time;
-
-        // 레디고 출력관련
-        gameStart = false;
-        startText.SetActive(false);
-        ReadyGo();
 
         life = 1;// test 용으로 1로 값 수정
         lifeText = GameObject.Find("LifeText").GetComponent<Text>();
@@ -94,36 +72,7 @@ public class GameManager : MonoBehaviour
     }
 
     // 1. 게임 시작 준비 (레디고)
-    void ReadyGo()
-    {
-        Debug.Log("ReadyGo Start");
-        StartCoroutine(LoadingEnd());
-    }
-    IEnumerator LoadingEnd() // Ready -> Go 순차 출력 코루틴
-    {
-        Debug.Log("StartLoadingEnd ");
-        yield return new WaitForSeconds(3);
-        readyText.SetActive(false);
-        startText.SetActive(true);
-        yield return new WaitForSeconds(1);
-        startText.SetActive(false);
-        gameStart = true;
-        Debug.Log("gameStart True");
-
-        isBlock = false;
-        Debug.Log("MusicStart");
-        //게임 모드 조건문 필요
-
-        if (gameMMMode == 2)
-        {
-            musicMode.MusicStart(); //기본모드진입
-        }
-        else if (gameTMMode == 2)
-        {
-            trafficMode.mainMusic.playOnAwake = true;
-            trafficMode.MusicStart(); //신호등모드진입
-        }
-    }
+    
     void Update()
     {
         nowTime = Time.time - startTime; // nowTime = 현재 게임 경과 시간

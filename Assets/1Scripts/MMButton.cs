@@ -1,19 +1,22 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
 public class MMButton : MonoBehaviour
 {
     // 1회만 눌리게 수정
     public GameManager gameManager;
+    public TMButton tMButton;
+    public AudioSource clickSound;
     public TextMeshPro musicModeText;
+    public int gameMMMode;
 
     bool isGameEnd;
 
     private void Start()
     {
         isGameEnd = false;
+        gameMMMode = 0;
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -21,23 +24,25 @@ public class MMButton : MonoBehaviour
         {
             if (!isGameEnd)
             {
-                Debug.Log("MMMode: " + gameManager.gameMMMode);
+                Debug.Log("TMMode: " + gameMMMode);
                 transform.position = transform.position + new Vector3(0, -0.1f, 0);
-                gameManager.gameMMMode += 1;
+                gameMMMode += 1;
+                clickSound.Play();
                 isGameEnd = true;
 
-                return; //테스트용으로 여기서 함수 끝
+                return; // 시연용 진입 막기
 
-                if (gameManager.gameMMMode == 1)
+                if (gameMMMode == 1)
                 {
-                    Debug.Log("MMMode: " + gameManager.gameMMMode);
+                    Debug.Log("TMMode: " + gameMMMode);
                     musicModeText.color = Color.blue;
                     Debug.Log("TMMode Text UI 출력");
-                    gameManager.gameTMMode = 0;
+                    tMButton.gameTMMode = 0;
+                    tMButton.trafficModeText.color = Color.white;
                 }
-                if (gameManager.gameMMMode == 2)
+                if (gameMMMode == 2)
                 {
-                    SceneManager.LoadScene("MusicMode");
+                    SceneManager.LoadScene("TrafficMode");
                 }
 
                 StartCoroutine(ButtonReturn());
@@ -47,11 +52,11 @@ public class MMButton : MonoBehaviour
 
     public IEnumerator ButtonReturn() // 버튼 눌렀을 때 1초후 제자리 
     {
-        Debug.Log("MMMode: " + gameManager.gameMMMode);
+        Debug.Log("TMMode: " + gameMMMode);
         Debug.Log("코루틴진입");
-        isGameEnd = false;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         Vector3 buttonReturn = Vector3.up * Mathf.Lerp(0.1f, 0.09f, 0.1f);
         transform.position = transform.position + buttonReturn;
+        isGameEnd = false;
     }
 }

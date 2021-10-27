@@ -33,7 +33,7 @@ public class Button : MonoBehaviour
     public IEnumerator ButtonReturn() // 버튼 눌렀을 때 1초후 제자리 
     {
         Debug.Log("버튼 제자리 코루틴 진입");
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         Vector3 buttonReturn = Vector3.up * Mathf.Lerp(0.1f, 0.09f, 0.1f);
         transform.position = transform.position + buttonReturn;
         yield return new WaitForSeconds(1f);

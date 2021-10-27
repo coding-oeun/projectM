@@ -64,17 +64,14 @@ public class TrafficMode : MonoBehaviour
 
         gameManager.isBlock = false;
         Debug.Log("MusicStart");
-        //게임 모드 조건문 필요
 
-        if (gameMMMode == 2)
-        {
-            musicMode.MusicStart(); //기본모드진입
-        }
-        else if (gameTMMode == 2)
-        {
-            trafficMode.mainMusic.playOnAwake = true;
-            trafficMode.MusicStart(); //신호등모드진입
-        }
+        mainMusic.playOnAwake = true;
+        MusicStart(); //신호등모드진입
+
+        //if (gameMMMode == 2)
+        //{
+        //    musicMode.MusicStart(); //기본모드진입
+        //}
     }
 
     public void MusicStart()
