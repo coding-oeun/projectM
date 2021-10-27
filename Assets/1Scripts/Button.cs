@@ -7,6 +7,7 @@ public class Button : MonoBehaviour
 {
     // 1회만 눌리게 수정
     public GameManager gameManager;
+    public AudioSource clickSound;
     bool isGameEnd;
 
     private void Start()
@@ -23,6 +24,7 @@ public class Button : MonoBehaviour
                 Debug.Log("버튼&손 충돌");
                 transform.position = transform.position + new Vector3(0, -0.1f, 0);
                 isGameEnd = true;
+                clickSound.Play();
                 StartCoroutine(ButtonReturn());
             }
         }

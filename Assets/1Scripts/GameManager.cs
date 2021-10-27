@@ -52,10 +52,17 @@ public class GameManager : MonoBehaviour
     public bool isBlock;
     
     public Button button;
+
+    //효과음 관리
+    public AudioSource effectSound;
+    public AudioClip failSound; //패널티 시
+    public AudioClip clearSound; //게임 성공 시
+    public AudioClip overSound; //게임 실패 시
     void Start()
     {
-        // test 용
-        gameTMMode = 2;
+        //test 용
+        gameTMMode = 0;
+        gameMMMode = 0;
         //gameTMMode = 0;
 
         if (gameMMMode == 2)
@@ -165,6 +172,8 @@ public class GameManager : MonoBehaviour
     void PenaltyProcess()
     {
         Debug.Log("패널티 진입");
+        effectSound.clip = failSound;
+        effectSound.Play();
         isBlock = true;
         life -= 1;
         lifeText.text = life + "/ 3";
@@ -187,6 +196,8 @@ public class GameManager : MonoBehaviour
         if (gameClear == true)
         {
             Debug.Log("게임 클리어");
+            effectSound.clip = clearSound;
+            effectSound.Play();
             clearText.SetActive(true);
             yield return new WaitForSeconds(3);
             SceneManager.LoadScene("LobbyScene");
@@ -195,9 +206,11 @@ public class GameManager : MonoBehaviour
         {
             overText.SetActive(true);
             yield return new WaitForSeconds(2);
+            effectSound.clip = overSound;
+            effectSound.Play();
             overText.SetActive(false);
             tryText.SetActive(true);
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(5);
             SceneManager.LoadScene("LobbyScene");
         }
     }

@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/LobbyScene.unity
+    guid: a27aeee06ebd2df40b9801bf67520fc3
+  - enabled: 1
+    path: Assets/Scenes/MusicMode.unity
+    guid: ff3308bcc7ce6b2419e3798c567cabb0
+  - enabled: 1
+    path: Assets/Scenes/TrafficMode.unity
+    guid: 97c656ff118862f4f9c6b77a989eccdc
   m_configObjects: {}
