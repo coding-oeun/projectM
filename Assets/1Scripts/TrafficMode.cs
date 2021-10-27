@@ -44,6 +44,11 @@ public class TrafficMode : MonoBehaviour
     {
         MusicLevel();
         TrafficLight();
+
+        if(gameManager.gameStart == false)
+        {
+            mainMusic.Pause();
+        }
     }
 
     void ReadyGo()
