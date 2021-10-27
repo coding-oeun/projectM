@@ -39,9 +39,12 @@ public class TrafficMode : MonoBehaviour
 
     public void MusicStart()
     {
-        Debug.Log("음악시작진입");
-        mainMusic.Play();
-        StartCoroutine(PlayTime(playLevel));
+        if(gameManager.gameStart == true)
+        {
+            Debug.Log("음악시작진입");
+            mainMusic.Play();
+            StartCoroutine(PlayTime(playLevel));
+        }
     }
     
     IEnumerator PlayTime(float playLevel)

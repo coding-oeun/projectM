@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,14 +13,18 @@ public class GameManager : MonoBehaviour
     // 패널티 화면 처리
 
     //public int gameMode; //1. musicMode 2.trafficMode
-    public int gameMMMode = 2;
-    public int gameTMMode = 0;
-    public bool gameClear = false;
+    public int gameMMMode;
+    public int gameTMMode;
     public bool gameStart;
+    public bool gameClear;
+    public bool gameOver;
     public float startTime;
     public float nowTime;
     public GameObject readyText;
     public GameObject startText;
+    public GameObject clearText;
+    public GameObject overText;
+    public GameObject tryText;
     public Text lifeText;
 
     //public MusicRule musicRule; // MusicRule Script 호출
@@ -50,7 +55,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         // test 용
-        gameMMMode = 2;
+        gameTMMode = 2;
         //gameTMMode = 0;
 
         if (gameMMMode == 2)
@@ -71,9 +76,14 @@ public class GameManager : MonoBehaviour
         startText.SetActive(false);
         ReadyGo();
 
-        life = 3;
+        life = 1;// test 용으로 1로 값 수정
         lifeText = GameObject.Find("LifeText").GetComponent<Text>();
         lifeText.text = life + "/ 3";
+
+        gameClear = false;
+        clearText.SetActive(false);
+        overText.SetActive(false);
+        tryText.SetActive(false);
     }
 
     // 1. 게임 시작 준비 (레디고)
@@ -154,25 +164,41 @@ public class GameManager : MonoBehaviour
     }
     void PenaltyProcess()
     {
+        Debug.Log("패널티 진입");
         isBlock = true;
-        Debug.Log("패널티 시작");
         life -= 1;
         lifeText.text = life + "/ 3";
-        Debug.Log("패널티 끝");
+        Debug.Log("Life: " + life);
+
+        if (life <= 0)
+        {
+            Debug.Log("라이프 0 진입");
+            Debug.Log("Life: " + life);
+            gameOver = true;
+            StartCoroutine(GameEnd());
+        }
     }
 
-    public IEnumerator ButtonReturn() // 버튼 눌렀을 때 1초후 제자리 
+
+    public IEnumerator GameEnd()
     {
-        yield return new WaitForSeconds(1f);
+        gameStart = false;
 
-        Vector3 buttonReturn = Vector3.up * Mathf.Lerp(0.1f, 0.09f, 0.1f);
-        button.GetComponent<Button>();
-        button.transform.position = button.transform.position + buttonReturn;
+        if (gameClear == true)
+        {
+            Debug.Log("게임 클리어");
+            clearText.SetActive(true);
+            yield return new WaitForSeconds(3);
+            SceneManager.LoadScene("LobbyScene");
+        }
+        else if (gameOver == true)
+        {
+            overText.SetActive(true);
+            yield return new WaitForSeconds(2);
+            overText.SetActive(false);
+            tryText.SetActive(true);
+            yield return new WaitForSeconds(3);
+            SceneManager.LoadScene("LobbyScene");
+        }
     }
-    public void GameOver()
-    {
-        Debug.Log("게임 클리어");
-        StartCoroutine(ButtonReturn());
-    }
-
 }

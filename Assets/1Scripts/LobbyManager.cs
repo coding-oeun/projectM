@@ -12,25 +12,23 @@ public class LobbyManager : MonoBehaviour
 
     public GameManager gameManager;
 
-    void Start()
-    {
+    //void Start()
+    //{
 
-    }
+    //}
 
-    void Update()
-    {
-        StartCoroutine(Test());
-        
+    //void Update()
+    //{
+    //    StartCoroutine(Test());
+    //}
 
-    }
-
-    IEnumerator Test()
-    {
-        yield return new WaitForSeconds(2);
-        Debug.Log("MusicMode 이동");
-        SceneManager.LoadScene("MusicMode");
-        gameManager.gameMMMode = 2;
-    }
+    //IEnumerator Test()
+    //{
+    //    yield return new WaitForSeconds(2);
+    //    Debug.Log("MusicMode 이동");
+    //    SceneManager.LoadScene("MusicMode");
+    //    gameManager.gameMMMode = 2;
+    //}
     //gameMode : 1. musicMode 2.trafficMode
 
     //public void OnClickMusicMode()
