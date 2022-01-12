@@ -1,5 +1,9 @@
 # projectM
-test
-test2
 
-리드미에 테스트 소스 올리기 후훗
+<시연영상>
+https://singoing.tistory.com/3
+
+<코드리뷰>
+https://singoing.tistory.com/20
+https://singoing.tistory.com/21
+https://singoing.tistory.com/22
